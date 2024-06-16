@@ -30,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AllPokemonsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Pokemom> listaPokemons = new ArrayList<>();
-    private Retrofit retrofit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,66 +42,29 @@ public class AllPokemonsActivity extends AppCompatActivity {
             return insets;
         });
 
-        retrofit = new Retrofit.Builder().baseUrl("https://pokeapi.co/api/v2/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        recuperarListaPokemon();
+        Bundle bundle = getIntent().getExtras();
+        listaPokemons = bundle.getParcelableArrayList("ListaPokemons");
+
+//        for (Pokemom pokemom: listaPokemons){
+//            if (pokemom.getSprites().getFrontDefault() != null){
+//                Log.d("AllPokemonsActivity",pokemom.getSprites().getFrontDefault());
+//            }
+//
+//        }
+
+
+        Log.d("AllPokemonsActivity","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        recyclerView = findViewById(R.id.rv_allPokemons);
+
+
+
+        AdapterAllPoke adapter =new AdapterAllPoke(listaPokemons);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
 
     }
 
-    private void recuperarListaPokemon(){
-        PokeService service = retrofit.create((PokeService.class));
-        Call<PokemonListResponse> call = service.getPokemonList();
-        call.enqueue(new Callback<PokemonListResponse>() {
-            @Override
-            public void onResponse(Call<PokemonListResponse> call, Response<PokemonListResponse> response) {
-                if (response.isSuccessful()){
-                    PokemonListResponse pokemonListResponse = response.body();
-                    if (pokemonListResponse != null){
-                        for (Pokemom pokemom: pokemonListResponse.getResults()){
-                            Call<Pokemom> pokemonDetailsCall = service.getPokemonDetails(pokemom.getName());
-
-                            pokemonDetailsCall.enqueue(new Callback<Pokemom>() {
-                                @Override
-                                public void onResponse(Call<Pokemom> call, Response<Pokemom> response) {
-                                    if (response.isSuccessful()){
-                                        Pokemom PokemonDetails = response.body();
-//                                        Log.d("resp", "  id:" +PokemonDetails.getId());
-                                        pokemom.setDetails(PokemonDetails.getId());
-
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<Pokemom> call, Throwable t) {
-
-                                }
-                            });
-//                            Log.d("resultado", "Resultado: "+pokemom.getName() +"  id:" +pokemom.getId());
-
-                            listaPokemons.add(pokemom);
-
-                        }
-                        recyclerView = findViewById(R.id.rv_allPokemons);
-
-
-
-                        AdapterAllPoke adapter =new AdapterAllPoke(listaPokemons);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setHasFixedSize(true);
-                        recyclerView.setAdapter(adapter);
-                    }else{
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PokemonListResponse> call, Throwable t) {
-
-            }
-        });
-    }
 
 }

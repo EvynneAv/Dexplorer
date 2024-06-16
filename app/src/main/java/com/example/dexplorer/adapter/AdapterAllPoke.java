@@ -34,6 +34,7 @@ public class AdapterAllPoke extends RecyclerView.Adapter<AdapterAllPoke.MyViewHo
     public void onBindViewHolder(@NonNull AdapterAllPoke.MyViewHolder holder, int position) {
         Pokemom pokemon = listaPoke.get(position);
         holder.nome.setText(pokemon.getName());
+        holder.id_pokemon.setText(String.valueOf(pokemon.getId()));
     }
 
     @Override
@@ -43,10 +44,12 @@ public class AdapterAllPoke extends RecyclerView.Adapter<AdapterAllPoke.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nome;
+        TextView id_pokemon;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             nome = itemView.findViewById(R.id.tv_NomePokemom);
+            id_pokemon = itemView.findViewById((R.id.tv_IdPokemom));
 
         }
     }

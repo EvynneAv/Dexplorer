@@ -7,8 +7,12 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface PokeService {
-    @GET("pokemon")
+    @GET("pokemon?limit=151")
     Call<PokemonListResponse> getPokemonList();
+
+    @GET("pokemon/{pokemon}")
+    Call<Pokemom> getPokemonDetails(@Path("pokemon") String PokemonName);
 }

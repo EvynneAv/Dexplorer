@@ -46,9 +46,6 @@ public class AllPokemonsActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         recuperarListaPokemon();
-//        this.criarPokemons();
-
-
 
     }
 
@@ -62,8 +59,28 @@ public class AllPokemonsActivity extends AppCompatActivity {
                     PokemonListResponse pokemonListResponse = response.body();
                     if (pokemonListResponse != null){
                         for (Pokemom pokemom: pokemonListResponse.getResults()){
-                            Log.d("resultado", "Resultado: "+pokemom.getName());
+                            Call<Pokemom> pokemonDetailsCall = service.getPokemonDetails(pokemom.getName());
+
+                            pokemonDetailsCall.enqueue(new Callback<Pokemom>() {
+                                @Override
+                                public void onResponse(Call<Pokemom> call, Response<Pokemom> response) {
+                                    if (response.isSuccessful()){
+                                        Pokemom PokemonDetails = response.body();
+//                                        Log.d("resp", "  id:" +PokemonDetails.getId());
+                                        pokemom.setDetails(PokemonDetails.getId());
+
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Pokemom> call, Throwable t) {
+
+                                }
+                            });
+//                            Log.d("resultado", "Resultado: "+pokemom.getName() +"  id:" +pokemom.getId());
+
                             listaPokemons.add(pokemom);
+
                         }
                         recyclerView = findViewById(R.id.rv_allPokemons);
 
@@ -86,58 +103,5 @@ public class AllPokemonsActivity extends AppCompatActivity {
             }
         });
     }
-    public void criarPokemons(){
 
-            Pokemom pokemon = new Pokemom("Picachu");
-            listaPokemons.add(pokemon);
-            pokemon = new Pokemom("Bubasauro");
-            listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-        pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);pokemon = new Pokemom("Bubasauro");
-        listaPokemons.add(pokemon);
-
-            Toast.makeText(this, "criando os poke", Toast.LENGTH_SHORT).show();
-
-        
-
-
-
-
-    }
 }

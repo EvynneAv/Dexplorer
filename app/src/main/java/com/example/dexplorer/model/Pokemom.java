@@ -8,12 +8,17 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
 import java.util.Map;
 
 public class Pokemom implements Parcelable {
+
+
     private int id = 0;
     private String name;
-    private String type;
+
+    @SerializedName("types")
+    private List<PokemonType> types;
 
     @SerializedName("sprites")
     private Sprites sprites;
@@ -28,21 +33,7 @@ public class Pokemom implements Parcelable {
     protected Pokemom(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        type = in.readString();
         sprites = in.readParcelable(Sprites.class.getClassLoader());
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(type);
-        dest.writeParcelable(sprites, flags);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<Pokemom> CREATOR = new Creator<Pokemom>() {
@@ -60,7 +51,6 @@ public class Pokemom implements Parcelable {
     public int getId() { return id; }
 
     public void setId(int id) { this.id = id; }
-//    public void setId(int id) { this.id = String.valueOf(id); }
 
     public String getName() {
         return name;
@@ -70,13 +60,7 @@ public class Pokemom implements Parcelable {
         this.name = name;
     }
 
-    public String getType() { return type; }
-
-    public void setType(String type) { this.type = type; }
-
     public Sprites getSprites() {
-
-        Log.d("Dentro depokemon","Rodou o get sprites");
         return sprites;
     }
 
@@ -85,14 +69,33 @@ public class Pokemom implements Parcelable {
     }
 
 
+    public List<PokemonType> getTypes() {
+        return types;
+    }
 
-    public void setDetails(int id, Sprites sprites /*String type*/){
+    public void setTypes(List<PokemonType> types) {
+        this.types = types;
+    }
+
+
+    public void setDetails(int id, Sprites sprites, List<PokemonType> types){
         setId(id);
         setSprites(sprites);
+        setTypes(types);
 
-//        setType(type);
 
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeParcelable(sprites, flags);
+    }
 }

@@ -41,13 +41,13 @@ public class AdapterAllPoke extends RecyclerView.Adapter<AdapterAllPoke.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull AdapterAllPoke.MyViewHolder holder, int position) {
         Pokemom pokemon = listaPoke.get(position);
-        if (pokemon.getSprites() == null){
-
-            Log.d("Deu errado", "Deu errado");
-        }
+//        if (pokemon.getSprites() == null){
+//
+//            Log.d("Deu errado", "Deu errado");
+//        }
 
         holder.nome.setText(pokemon.getName());
-        holder.id_pokemon.setText(String.valueOf(pokemon.getId()));
+        holder.id_pokemon.setText("#"+String.valueOf(pokemon.getId()));
         Glide.with(holder.itemView.getContext()).load(pokemon.getSprites().getFrontDefault()).into(holder.img_pokemon);
     }
 

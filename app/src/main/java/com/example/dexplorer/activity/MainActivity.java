@@ -82,10 +82,14 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<Pokemom> call, Response<Pokemom> response) {
                                     if (response.isSuccessful()){
-                                        Log.d("resp", "ID: "+response.body().getId()+"  Nome:" +  response.body().getName()+" FrontSprite:"+response.body().getSprites().getFrontDefault());
+                                        Log.d("resp", "ID: "+response.body().getId()+"  Nome:" +  response.body().getName()
+                                                +" FrontSprite:"+response.body().getSprites().getFrontDefault()
+                                                +" Tipo Slot 1: "+response.body().getTypes().get(0).getType().getName()
+
+                                        );
                                         Pokemom PokemonDetails = response.body();
 //                                        Log.d("resp", "  id:" +PokemonDetails.getId());
-                                        pokemom.setDetails(PokemonDetails.getId(), PokemonDetails.getSprites());
+                                        pokemom.setDetails(PokemonDetails.getId(), PokemonDetails.getSprites(), PokemonDetails.getTypes());
 
                                     }
                                 }

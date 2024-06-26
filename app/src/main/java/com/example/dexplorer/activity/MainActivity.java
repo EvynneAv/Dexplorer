@@ -30,22 +30,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 //    private Button buttonEnviar;
     private Button buttonBuscarPokemons;
+    private Button buttonTest;
     private List<Pokemom> listaPokemons = new ArrayList();
     private Retrofit retrofit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        buttonBuscarPokemons = findViewById(R.id.buttonBuscarPokemons);
+
 
         retrofit = new Retrofit.Builder().baseUrl("https://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+                .build();
 
         recuperarListaPokemon();
-
-
+        buttonBuscarPokemons = findViewById(R.id.buttonBuscarPokemons);
+        buttonTest = findViewById(R.id.btn_test);
 
         buttonBuscarPokemons.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,11 +61,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        buttonTest.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                startActivity(intent);
+            }
+        }));
+
 
 
 
 
     }
+
+
 
     private void recuperarListaPokemon(){
         PokeService service = retrofit.create((PokeService.class));

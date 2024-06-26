@@ -1,5 +1,6 @@
 package com.example.dexplorer.model;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -8,10 +9,11 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
-public class Pokemom implements Parcelable {
+public class Pokemom implements Parcelable{
 
 
     private int id = 0;
@@ -24,17 +26,21 @@ public class Pokemom implements Parcelable {
     private Sprites sprites;
 
 
-
     public Pokemom(String name) {
         this.name = name;
     }
-    public Pokemom(){}
+
+    public Pokemom() {
+    }
 
     protected Pokemom(Parcel in) {
         id = in.readInt();
         name = in.readString();
+        types = in.createTypedArrayList(PokemonType.CREATOR);
         sprites = in.readParcelable(Sprites.class.getClassLoader());
+
     }
+
 
     public static final Creator<Pokemom> CREATOR = new Creator<Pokemom>() {
         @Override
@@ -48,9 +54,13 @@ public class Pokemom implements Parcelable {
         }
     };
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -78,7 +88,7 @@ public class Pokemom implements Parcelable {
     }
 
 
-    public void setDetails(int id, Sprites sprites, List<PokemonType> types){
+    public void setDetails(int id, Sprites sprites, List<PokemonType> types) {
         setId(id);
         setSprites(sprites);
         setTypes(types);
@@ -96,6 +106,11 @@ public class Pokemom implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(name);
+        dest.writeTypedList(types);
         dest.writeParcelable(sprites, flags);
     }
 }
+
+
+
+

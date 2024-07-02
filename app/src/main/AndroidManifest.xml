@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Dexplorer"
         tools:targetApi="31">
         <activity
+            android:name=".activity.PokemonInDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.PokemonInDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.TestActivity"
             android:exported="false" />
         <activity

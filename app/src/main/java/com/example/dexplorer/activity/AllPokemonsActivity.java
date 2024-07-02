@@ -1,7 +1,10 @@
 package com.example.dexplorer.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +20,8 @@ import com.example.dexplorer.adapter.AdapterAllPoke;
 import com.example.dexplorer.api.PokeService;
 import com.example.dexplorer.model.Pokemom;
 import com.example.dexplorer.model.PokemonListResponse;
+import com.example.dexplorer.model.PokemonType;
+import com.example.dexplorer.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +50,6 @@ public class AllPokemonsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         listaPokemons = bundle.getParcelableArrayList("ListaPokemons");
 
-//        for (Pokemom pokemom: listaPokemons){
-//            if (pokemom.getSprites().getFrontDefault() != null){
-//                Log.d("AllPokemonsActivity",pokemom.getSprites().getFrontDefault());
-//            }
-//
-//        }
 
 
         Log.d("AllPokemonsActivity","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -63,6 +62,35 @@ public class AllPokemonsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getApplicationContext(),
+                        recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(getApplicationContext(), listaPokemons.get(position).getName(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), PokemonInDetailsActivity.class);
+                        Bundle bundle = new Bundle();
+
+                        bundle.putParcelable("pokemon", listaPokemons.get(position));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        Toast.makeText(getApplicationContext(), "Click longo" +
+                                "", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+                )
+        );
 
     }
 

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         recuperarListaPokemon();
         buttonBuscarPokemons = findViewById(R.id.buttonBuscarPokemons);
-        buttonTest = findViewById(R.id.btn_test);
+
 
         buttonBuscarPokemons.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,18 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        buttonTest.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TestActivity.class);
-                startActivity(intent);
-            }
-        }));
-
-
-
-
-
     }
 
 
@@ -101,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                                         );
                                         Pokemom PokemonDetails = response.body();
 //                                        Log.d("resp", "  id:" +PokemonDetails.getId());
-                                        pokemom.setDetails(PokemonDetails.getId(), PokemonDetails.getSprites(), PokemonDetails.getTypes());
+                                        pokemom.setDetails(PokemonDetails.getId(), PokemonDetails.getSprites(), PokemonDetails.getTypes(), PokemonDetails.getHeight(), PokemonDetails.getWeight());
 
                                     }
                                 }

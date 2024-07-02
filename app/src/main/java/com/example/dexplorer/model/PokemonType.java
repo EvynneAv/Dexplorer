@@ -14,8 +14,6 @@ public class PokemonType implements Parcelable{
     private PokemonTypeDetail type;
 
     protected PokemonType(Parcel in) {
-
-
         slot = in.readInt();
         type = in.readParcelable(PokemonTypeDetail.class.getClassLoader());
     }

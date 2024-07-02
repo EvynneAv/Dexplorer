@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.dexplorer.R;
+import com.example.dexplorer.adapter.AdapterAbilityItem;
 import com.example.dexplorer.adapter.AdapterTypeItem;
 import com.example.dexplorer.model.Pokemom;
 
@@ -25,8 +26,9 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
     TextView pokemonHeight;
     TextView pokemonWeight;
 
-    RecyclerView pokemonTypes;
 
+    RecyclerView pokemonTypes;
+    RecyclerView pokemonAbilities;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
         pokemonTypes = findViewById(R.id.rv_typesInDetails);
         pokemonHeight = findViewById(R.id.tv_pokemonHeightInDetails);
         pokemonWeight = findViewById(R.id.tv_pokemonWeightInDetails);
+        pokemonAbilities = findViewById(R.id.rv_abilityList);
 
 
 
@@ -54,16 +57,15 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
         pokemonName.setText(selectedPokemon.getName());
         pokemonID.setText(String.valueOf(selectedPokemon.getId()));
         AdapterTypeItem adaptertype = new AdapterTypeItem(selectedPokemon.getTypes());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerTypeItems = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         pokemonTypes.setAdapter(adaptertype);
-        pokemonTypes.setLayoutManager(layoutManager);
-        pokemonWeight.setText(String.valueOf(selectedPokemon.getWeight() * 0.1)+" kg");
-        pokemonHeight.setText(String.valueOf(selectedPokemon.getWeight() * 10) + " cm");
-        
-
-
-
-
+        pokemonTypes.setLayoutManager(layoutManagerTypeItems);
+        pokemonWeight.setText(String.format("%.2f", selectedPokemon.getWeight() * 0.1)+" kg");
+        pokemonHeight.setText(String.format("%.2f", selectedPokemon.getHeight() * 0.1) + " m");
+        AdapterAbilityItem adapterAbility = new AdapterAbilityItem(selectedPokemon.getAbilities());
+        pokemonAbilities.setAdapter(adapterAbility);
+        LinearLayoutManager layoutManagerAbilityItems = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        pokemonAbilities.setLayoutManager(layoutManagerAbilityItems);
 
     }
 }

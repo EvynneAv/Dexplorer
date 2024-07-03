@@ -30,6 +30,10 @@ public class Pokemom implements Parcelable{
     @SerializedName("abilities")
     private List<AbilitySlot> abilities;
 
+    @SerializedName("stats")
+    private  List<StatSlot> stats;
+
+
 
     public Pokemom(String name) {
         this.name = name;
@@ -47,6 +51,7 @@ public class Pokemom implements Parcelable{
         types = in.createTypedArrayList(PokemonType.CREATOR);
         sprites = in.readParcelable(Sprites.class.getClassLoader());
         abilities= in.createTypedArrayList(AbilitySlot.CREATOR);
+        stats = in.createTypedArrayList(StatSlot.CREATOR);
     }
 
     public static final Creator<Pokemom> CREATOR = new Creator<Pokemom>() {
@@ -118,13 +123,23 @@ public class Pokemom implements Parcelable{
         this.abilities = abilities;
     }
 
-    public void setDetails(int id, Sprites sprites, List<PokemonType> types, int height, int weight, List<AbilitySlot> abilities) {
+    public List<StatSlot> getStats() {
+        return stats;
+    }
+
+    public void setStats(List<StatSlot> stats) {
+        this.stats = stats;
+    }
+
+
+    public void setDetails(int id, Sprites sprites, List<PokemonType> types, int height, int weight, List<AbilitySlot> abilities, List<StatSlot> stats) {
         setId(id);
         setSprites(sprites);
         setTypes(types);
         setHeight(height);
         setWeight(weight);
         setAbilities(abilities);
+        setStats(stats);
 
     }
 
@@ -143,6 +158,7 @@ public class Pokemom implements Parcelable{
         dest.writeTypedList(types);
         dest.writeParcelable(sprites, flags);
         dest.writeTypedList(abilities);
+        dest.writeTypedList(stats);
     }
 }
 

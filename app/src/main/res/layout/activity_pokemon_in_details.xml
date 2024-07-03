@@ -131,16 +131,16 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_abilityList"
-        android:layout_width="188dp"
-        android:layout_height="21dp"
+        android:layout_width="189dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="13dp"
         android:orientation="horizontal"
         android:tooltipText="@layout/layout_item_listview"
         app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tv_pokemonWeightInDetails"
-        app:layout_constraintTop_toTopOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pokemonWeightInDetails"
         tools:listitem="@layout/layout_item_ability" />
 
 

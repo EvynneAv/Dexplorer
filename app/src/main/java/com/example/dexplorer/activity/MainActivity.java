@@ -89,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
                                         );
                                         Pokemom PokemonDetails = response.body();
 //                                        Log.d("resp", "  id:" +PokemonDetails.getId());
-                                        pokemom.setDetails(PokemonDetails.getId(), PokemonDetails.getSprites(), PokemonDetails.getTypes(), PokemonDetails.getHeight(), PokemonDetails.getWeight(), PokemonDetails.getAbilities());
+                                        pokemom.setDetails(PokemonDetails.getId(), PokemonDetails.getSprites(), PokemonDetails.getTypes(), PokemonDetails.getHeight(),
+                                                PokemonDetails.getWeight(), PokemonDetails.getAbilities(), PokemonDetails.getStats());
+
 
                                     }
                                 }

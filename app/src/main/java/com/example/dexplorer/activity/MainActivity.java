@@ -16,6 +16,7 @@ import com.example.dexplorer.adapter.AdapterAllPoke;
 import com.example.dexplorer.api.PokeService;
 import com.example.dexplorer.model.Pokemom;
 import com.example.dexplorer.model.PokemonListResponse;
+import com.example.dexplorer.model.Species;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     PokemonListResponse pokemonListResponse = response.body();
                     if (pokemonListResponse != null){
+
+
+
                         for (Pokemom pokemom: pokemonListResponse.getResults()){
                             Call<Pokemom> pokemonDetailsCall = service.getPokemonDetails(pokemom.getName());
 
@@ -87,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
                                                 +" Tipo Slot 1: "+response.body().getTypes().get(0).getType().getName()
 
                                         );
-                                        Pokemom PokemonDetails = response.body();
+                                        Pokemom pokemonDetails = response.body();
 //                                        Log.d("resp", "  id:" +PokemonDetails.getId());
-                                        pokemom.setDetails(PokemonDetails.getId(), PokemonDetails.getSprites(), PokemonDetails.getTypes(), PokemonDetails.getHeight(),
-                                                PokemonDetails.getWeight(), PokemonDetails.getAbilities(), PokemonDetails.getStats());
+                                        pokemom.setDetails(pokemonDetails.getId(), pokemonDetails.getSprites(), pokemonDetails.getTypes(), pokemonDetails.getHeight(),
+                                                pokemonDetails.getWeight(), pokemonDetails.getAbilities(), pokemonDetails.getStats(), pokemonDetails.getSpecies());
 
 
                                     }
@@ -101,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                             });
-//                            Log.d("resultado", "Resultado: "+pokemom.getName() +"  id:" +pokemom.getId());
+
 
                             listaPokemons.add(pokemom);
 

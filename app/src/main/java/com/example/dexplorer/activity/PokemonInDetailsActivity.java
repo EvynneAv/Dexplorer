@@ -29,6 +29,14 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
 
     RecyclerView pokemonTypes;
     RecyclerView pokemonAbilities;
+
+    TextView pokemonStatsHP;
+    TextView pokemonStatsAttack;
+    TextView pokemonStatsDefense;
+    TextView pokemonStatsSPAttack;
+    TextView pokemonStatsSPDefense;
+    TextView pokemonStatsSpeed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +58,13 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
         pokemonHeight = findViewById(R.id.tv_pokemonHeightInDetails);
         pokemonWeight = findViewById(R.id.tv_pokemonWeightInDetails);
         pokemonAbilities = findViewById(R.id.rv_abilityList);
+        pokemonStatsHP = findViewById(R.id.tv_hpStatInDetails);
+        pokemonStatsAttack = findViewById(R.id.tv_attackStatinDetails);
+        pokemonStatsDefense = findViewById(R.id.tv_defenseStatInDetails);
+        pokemonStatsDefense= findViewById(R.id.tv_defenseStatInDetails);
+        pokemonStatsSPAttack = findViewById(R.id.tv_spAttackInDetails);
+        pokemonStatsSPDefense = findViewById(R.id.tv_spDefenseInDetails);
+        pokemonStatsSpeed = findViewById(R.id.tv_SpeedStatInDetails);
 
 
 
@@ -66,6 +81,14 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
         pokemonAbilities.setAdapter(adapterAbility);
         LinearLayoutManager layoutManagerAbilityItems = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         pokemonAbilities.setLayoutManager(layoutManagerAbilityItems);
+
+
+        pokemonStatsHP.setText((String.valueOf(selectedPokemon.getStats().get(0).getBase_stat())));
+        pokemonStatsAttack.setText((String.valueOf(selectedPokemon.getStats().get(1).getBase_stat())));
+        pokemonStatsDefense.setText((String.valueOf(selectedPokemon.getStats().get(2).getBase_stat())));
+        pokemonStatsSPAttack.setText((String.valueOf(selectedPokemon.getStats().get(3).getBase_stat())));
+        pokemonStatsSPDefense.setText((String.valueOf(selectedPokemon.getStats().get(4).getBase_stat())));
+        pokemonStatsSpeed.setText((String.valueOf(selectedPokemon.getStats().get(5).getBase_stat())));
 
     }
 }

@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface PokeService {
-    @GET("pokemon?limit=15")
+    @GET("pokemon?limit=151")
     Call<PokemonListResponse> getPokemonList();
 
     @GET("pokemon/{pokemon}")

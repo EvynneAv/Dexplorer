@@ -1,10 +1,17 @@
 package com.example.dexplorer.activity;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -25,7 +32,7 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
     TextView pokemonID;
     TextView pokemonHeight;
     TextView pokemonWeight;
-
+    ImageButton catchPokeButton;
 
     RecyclerView pokemonTypes;
     RecyclerView pokemonAbilities;
@@ -50,7 +57,7 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         selectedPokemon = bundle.getParcelable("pokemon");
-
+        catchPokeButton = findViewById(R.id.pokeballButton);
         pokemonName = findViewById(R.id.tv_PokemonNameInDetails);
         pokemonPhoto = findViewById(R.id.iv_PokemonPhotoInDetails);
         pokemonID = findViewById(R.id.tv_pokemonIDInDetails);
@@ -90,5 +97,40 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
         pokemonStatsSPDefense.setText((String.valueOf(selectedPokemon.getStats().get(4).getBase_stat())));
         pokemonStatsSpeed.setText((String.valueOf(selectedPokemon.getStats().get(5).getBase_stat())));
 
+        //modal
+        catchPokeButton.setOnClickListener(v -> showNameInputDialog());
+
     }
+
+    private void showNameInputDialog(){
+        //inflar o layout personalizado
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_name_input, null);
+
+        //Criar o alert dialog
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(dialogView);
+
+        //Capturar o editText do layout inflado
+        EditText editTextName = dialogView.findViewById(R.id.editTextName);
+
+        //configurar os botões do dialog
+        dialogBuilder
+                .setCancelable(true)
+                .setPositiveButton("Salvar", (dialog, id)->{
+                    //Ação quando o botão salvar for clicado
+                    String enteredName = editTextName.getText().toString();
+                    if (!enteredName.isEmpty()){
+                        Toast.makeText(this,"Nome inserido: " + enteredName, Toast.LENGTH_SHORT).show();
+                        //adicionar ao banco aqui
+                    }else{
+                        Toast.makeText(this, "Por favor insira um nome.", Toast.LENGTH_SHORT).show();
+                    }
+                }).setNegativeButton("Cancelar", (dialog, id)->dialog.cancel());
+        //criar e exibir o dialog
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+    }
+
 }

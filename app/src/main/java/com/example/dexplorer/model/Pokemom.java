@@ -40,9 +40,16 @@ public class Pokemom implements Parcelable{
     public Pokemom(String name) {
         this.name = name;
     }
+    public Pokemom(String name, String apelido) {
+
+        this.name = name;
+
+    }
 
     public Pokemom() {
     }
+
+
 
 
     protected Pokemom(Parcel in) {
@@ -171,7 +178,10 @@ public class Pokemom implements Parcelable{
         dest.writeTypedList(abilities);
         dest.writeTypedList(stats);
         dest.writeParcelable(species, flags);
+
     }
+
+
 }
 
 

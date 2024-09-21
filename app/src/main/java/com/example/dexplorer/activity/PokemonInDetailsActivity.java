@@ -1,6 +1,7 @@
 package com.example.dexplorer.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -24,6 +26,15 @@ import com.example.dexplorer.R;
 import com.example.dexplorer.adapter.AdapterAbilityItem;
 import com.example.dexplorer.adapter.AdapterTypeItem;
 import com.example.dexplorer.model.Pokemom;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PokemonInDetailsActivity extends AppCompatActivity {
     Pokemom selectedPokemon;
@@ -43,6 +54,9 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
     TextView pokemonStatsSPAttack;
     TextView pokemonStatsSPDefense;
     TextView pokemonStatsSpeed;
+
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = auth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,37 +114,72 @@ public class PokemonInDetailsActivity extends AppCompatActivity {
         //modal
         catchPokeButton.setOnClickListener(v -> showNameInputDialog());
 
+
+
     }
 
     private void showNameInputDialog(){
-        //inflar o layout personalizado
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View dialogView = inflater.inflate(R.layout.dialog_name_input, null);
+        if (currentUser != null){
+            //inflar o layout personalizado
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View dialogView = inflater.inflate(R.layout.dialog_name_input, null);
 
-        //Criar o alert dialog
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setView(dialogView);
+            //Criar o alert dialog
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setView(dialogView);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        //Capturar o editText do layout inflado
-        EditText editTextName = dialogView.findViewById(R.id.editTextName);
 
-        //configurar os botões do dialog
-        dialogBuilder
-                .setCancelable(true)
-                .setPositiveButton("Salvar", (dialog, id)->{
-                    //Ação quando o botão salvar for clicado
-                    String enteredName = editTextName.getText().toString();
-                    if (!enteredName.isEmpty()){
-                        Toast.makeText(this,"Nome inserido: " + enteredName, Toast.LENGTH_SHORT).show();
-                        //adicionar ao banco aqui
-                    }else{
-                        Toast.makeText(this, "Por favor insira um nome.", Toast.LENGTH_SHORT).show();
+            EditText editTextApelido = dialogView.findViewById(R.id.editTextNamePokemonModal);
+            //configurar os botões do dialog
+            dialogBuilder
+                    .setCancelable(true)
+                    .setPositiveButton("Salvar", (dialog, id)->{
+                        //Ação quando o botão salvar for clicado
+                        String apelidodoModal = editTextApelido.getText().toString();
+                        if (!apelidodoModal.isEmpty()) {
+                            addPokemonToFirestore(apelidodoModal, selectedPokemon.getName(), selectedPokemon.getSprites().getFrontDefault());
+                        } else {
+                            Toast.makeText(this, "Por favor, insira um nome.", Toast.LENGTH_SHORT).show();
+                        }
+                    }).setNegativeButton("Cancelar", (dialog, id)->dialog.cancel());
+            //criar e exibir o dialog
+            AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog.show();
+
+        }else{
+            Toast.makeText(this, "Você precisa estar logado para fazer isso!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void addPokemonToFirestore(String apelido, String nome, String photoUrl) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Referência ao documento "equipe" dentro da coleção "mypokemons"
+        DocumentReference equipeRef = db.collection("mypokemons").document("equipe");
+
+        // Criar os dados do Pokémon
+        Map<String, Object> pokemonData = new HashMap<>();
+        pokemonData.put("apelido", apelido);
+        pokemonData.put("nome", nome);
+        pokemonData.put("photo", photoUrl);
+
+        // Atualizar o documento "equipe" com o novo Pokémon
+        equipeRef.set(pokemonData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Sucesso ao adicionar
+                        Toast.makeText(PokemonInDetailsActivity.this, "Pokémon adicionado!", Toast.LENGTH_SHORT).show();
                     }
-                }).setNegativeButton("Cancelar", (dialog, id)->dialog.cancel());
-        //criar e exibir o dialog
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Falha ao adicionar
+                        Toast.makeText(PokemonInDetailsActivity.this, "Erro ao adicionar Pokémon", Toast.LENGTH_SHORT).show();
+                        Log.w("Firestore", "Erro ao adicionar documento", e);
+                    }
+                });
     }
 
 }

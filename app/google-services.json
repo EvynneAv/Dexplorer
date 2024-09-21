@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "635649252690",
+    "project_id": "dexplorer-aa80a",
+    "storage_bucket": "dexplorer-aa80a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635649252690:android:9bd2312b04cbc7bc7a2e8b",
+        "android_client_info": {
+          "package_name": "com.example.dexplorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635649252690-u6k39q5q6tss5uqbkrukj5ckj2mrfaen.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dexplorer",
+            "certificate_hash": "3e3cbe0d1e1ecc74a7d67a95445304d33207838e"
+          }
+        },
+        {
+          "client_id": "635649252690-qlgs88g5cavaiiueggc73r2apmfmpjq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHk41eZe9d967OXH1nVekjBNP8CPPrFPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635649252690-qlgs88g5cavaiiueggc73r2apmfmpjq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,17 +6,42 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.dexplorer.R;
 import com.example.dexplorer.activity.AllPokemonsActivity;
 import com.example.dexplorer.api.PokeService;
 import com.example.dexplorer.model.Pokemom;
 import com.example.dexplorer.model.PokemonListResponse;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +54,42 @@ public class MainActivity extends AppCompatActivity {
     private List<Pokemom> listaPokemons = new ArrayList();
     private Retrofit retrofit;
     private boolean isDataLoaded = false; // Variável de controle para indicar que os dados foram carregados
+    private Button buttonLogin;
+    private Button buttonMyTeam;
+    FirebaseAuth auth;
+    GoogleSignInClient googleSignInClient;
+    ImageView imgProfile;
+    FirebaseUser currentUser;
+    //config login google
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode()==RESULT_OK){
+                Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                try {
+                    GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
+                    AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
+                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                auth = FirebaseAuth.getInstance();
+                                Glide.with(MainActivity.this).load(Objects.requireNonNull(auth.getCurrentUser()).getPhotoUrl()).into(imgProfile);
+                                Toast.makeText(MainActivity.this, "Logado com sucesso", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(MainActivity.this, "Falha ao logar: " + task.getException(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +105,45 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         recuperarListaPokemon();
+
+        //Login no google
+        FirebaseApp.initializeApp(this);
+        imgProfile = findViewById(R.id.profileimage);
+
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_id))
+                        .requestEmail()
+                                .build();
+        googleSignInClient = GoogleSignIn.getClient(MainActivity.this, options);
+        auth = FirebaseAuth.getInstance();
+        currentUser = null;
+        SignInButton signButton = findViewById(R.id.buttonlogin);
+        signButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = googleSignInClient.getSignInIntent();
+                activityResultLauncher.launch(intent);
+                currentUser = auth.getCurrentUser();
+            }
+        });
+
+
+
+
+        buttonMyTeam = findViewById(R.id.btn_minha_equipe);
+
+        buttonMyTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentUser != null){
+                    Intent intent = new Intent(getApplicationContext(), myTeamActivity.class);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(MainActivity.this, "Faça Loging para ter acesso a seu time", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         buttonBuscarPokemons.setOnClickListener(new View.OnClickListener() {
             @Override

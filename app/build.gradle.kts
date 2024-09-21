@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -40,6 +41,9 @@ dependencies {
     implementation("androidx.activity:activity:1.8.0")
 
     implementation ("com.github.bumptech.glide:glide:4.14.2")
+    implementation("com.google.firebase:firebase-auth:23.0.0")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.firebase:firebase-firestore:25.1.0")
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
 

@@ -4,7 +4,7 @@ Um aplicativo android simples, que exibe uma lista de Pokemons e seus Stats.
 
 ## :technologist: Membros da equipe
 
-473618, Evynne Ferreira Avelino, Engenharia de Software.
+Evynne Ferreira Avelino, Engenharia de Software.
 
 ## :spiral_calendar: Entidades ou tabelas do sistema
 
